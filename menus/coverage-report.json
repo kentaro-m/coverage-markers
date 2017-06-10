@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle coverage-report",
+        "command": "coverage-report:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "coverage-report",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "coverage-report:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

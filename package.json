@@ -1,0 +1,18 @@
+{
+  "name": "coverage-report",
+  "main": "./lib/coverage-report",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [],
+  "activationCommands": {
+    "atom-workspace": "coverage-report:toggle"
+  },
+  "repository": "https://github.com/atom/coverage-report",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "lcov-parse": "0.0.10"
+  }
+}
