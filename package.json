@@ -5,7 +5,7 @@
   "description": "A short description of your package",
   "keywords": [],
   "activationCommands": {
-    "atom-workspace": "coverage-report:toggle"
+    "atom-workspace": "coverage-report:show"
   },
   "repository": "https://github.com/atom/coverage-report",
   "license": "MIT",

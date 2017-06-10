@@ -3,7 +3,7 @@
     "atom-text-editor": [
       {
         "label": "Toggle coverage-report",
-        "command": "coverage-report:toggle"
+        "command": "coverage-report:show"
       }
     ]
   },
@@ -12,11 +12,15 @@
       "label": "Packages",
       "submenu": [
         {
-          "label": "coverage-report",
+          "label": "Coverage Report",
           "submenu": [
             {
-              "label": "Toggle",
-              "command": "coverage-report:toggle"
+              "label": "Show",
+              "command": "coverage-report:show"
+            },
+            {
+              "label": "Dismiss",
+              "command": "coverage-report:dismiss"
             }
           ]
         }
