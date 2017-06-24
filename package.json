@@ -1,13 +1,13 @@
 {
-  "name": "coverage-report",
-  "main": "./lib/coverage-report",
-  "version": "0.0.0",
-  "description": "A short description of your package",
+  "name": "coverage-markers",
+  "main": "./lib/coverage-markers",
+  "version": "0.1.0",
+  "description": "Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.",
   "keywords": [],
   "activationCommands": {
-    "atom-workspace": "coverage-report:show"
+    "atom-workspace": "coverage-markers:show"
   },
-  "repository": "https://github.com/atom/coverage-report",
+  "repository": "https://github.com/atom/coverage-markers",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"

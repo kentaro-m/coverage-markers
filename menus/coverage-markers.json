@@ -2,8 +2,8 @@
   "context-menu": {
     "atom-text-editor": [
       {
-        "label": "Toggle coverage-report",
-        "command": "coverage-report:show"
+        "label": "Toggle coverage-markers",
+        "command": "coverage-markers:show"
       }
     ]
   },
@@ -12,15 +12,15 @@
       "label": "Packages",
       "submenu": [
         {
-          "label": "Coverage Report",
+          "label": "Coverage Markers",
           "submenu": [
             {
               "label": "Show Coverage",
-              "command": "coverage-report:show"
+              "command": "coverage-markers:show"
             },
             {
               "label": "Hide Coverage",
-              "command": "coverage-report:hide"
+              "command": "coverage-markers:hide"
             }
           ]
         }
