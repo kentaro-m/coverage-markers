@@ -7,7 +7,7 @@
   "activationCommands": {
     "atom-workspace": "coverage-markers:show"
   },
-  "repository": "https://github.com/atom/coverage-markers",
+  "repository": "https://github.com/kentaro-m/coverage-markers",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
