@@ -15,12 +15,12 @@
           "label": "Coverage Report",
           "submenu": [
             {
-              "label": "Show",
+              "label": "Show Coverage",
               "command": "coverage-report:show"
             },
             {
-              "label": "Dismiss",
-              "command": "coverage-report:dismiss"
+              "label": "Hide Coverage",
+              "command": "coverage-report:hide"
             }
           ]
         }

@@ -11,7 +11,7 @@ Coverage Report is Atom package which displays JavaScript code coverage in gutte
 
 This package monitors lcov file and reflects the coverage in the editor every time the file is changed. The green line covers the test, the red one does not cover the test.
 
-To display the coverage in the editor, use the application menu `Packages > Coverage Report > Show`. Also, to hide the coverage in the editor, use the application menu `Packages > Coverage Report > Dismiss`
+To display the coverage in the editor, use the application menu `Packages > Coverage Report > Show Coverage`. Also, to hide the coverage in the editor, use the application menu `Packages > Coverage Report > Hide Coverage`
 
 ## Todo
 * Switch coverage display style with line number highlight and line highlight
