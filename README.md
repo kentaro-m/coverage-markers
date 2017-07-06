@@ -1,4 +1,6 @@
 # Coverage Markers
+
+[![Join the chat at https://gitter.im/coverage-markers/Lobby](https://badges.gitter.im/coverage-markers/Lobby.svg)](https://gitter.im/coverage-markers/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.
 
 ## Features
