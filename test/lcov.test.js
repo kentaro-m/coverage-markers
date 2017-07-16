@@ -107,7 +107,7 @@ describe('Lcov', function () {
       BRH:0
       end_of_record`;
 
-      return assert.eventually.isArray(parseLcovInfo(dummyLcovInfo));
+      return assert.isArray(parseLcovInfo(dummyLcovInfo));
     });
 
     it('Throw error, when the lcov info is invalid', function () {
@@ -123,7 +123,9 @@ describe('Lcov', function () {
       BRH:0
       end_of_record`;
 
-      return assert.isRejected(parseLcovInfo(dummyLcovInfo), 'Does not conform to the expected format for a lcov info');
+      assert.throws(() => {
+        parseLcovInfo(dummyLcovInfo);
+      }, 'Does not conform to the expected format for a lcov info');
     });
   });
 
@@ -143,7 +145,9 @@ describe('Lcov', function () {
         { checksum: '', executionCount: 0, lineNumber: 33 },
       ];
 
-      return assert.isFulfilled(addMarkers(editor, linesData));
+      addMarkers(editor, linesData);
+      const markers = editor.getMarkers();
+      assert.isAbove(markers.length, 0);
     });
   });
 
@@ -164,7 +168,9 @@ describe('Lcov', function () {
     });
 
     it('Delete all markers associated with the editor', function () {
-      return assert.isFulfilled(removeMarkers(editor));
+      removeMarkers(editor);
+      const markers = editor.getMarkers();
+      assert.equal(markers.length, 0);
     });
   });
 
@@ -190,7 +196,9 @@ describe('Lcov', function () {
     });
 
     it('Markers can be displayed to the editor', function () {
-      return assert.isFulfilled(renderCoverage(editor, lcovInfo));
+      renderCoverage(editor, lcovInfo);
+      const markers = editor.getMarkers();
+      assert.isAbove(markers.length, 0);
     });
   });
 });
