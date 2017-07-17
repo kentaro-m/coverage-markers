@@ -1,7 +1,7 @@
 {
   "name": "coverage-markers",
   "main": "./lib/coverage-markers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.",
   "keywords": [],
   "activationCommands": {
