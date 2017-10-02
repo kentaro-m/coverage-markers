@@ -1,5 +1,5 @@
 {
   "atom-workspace": {
-    "ctrl-alt-o": "coverage-markers:show"
+    "ctrl-alt-o": "coverage-markers:toggle"
   }
 }
