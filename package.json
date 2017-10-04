@@ -5,7 +5,7 @@
   "description": "Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.",
   "keywords": [],
   "activationCommands": {
-    "atom-workspace": "coverage-markers:show"
+    "atom-workspace": "coverage-markers:toggle"
   },
   "repository": "https://github.com/kentaro-m/coverage-markers",
   "license": "MIT",

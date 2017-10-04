@@ -3,7 +3,7 @@
     "atom-text-editor": [
       {
         "label": "Toggle coverage-markers",
-        "command": "coverage-markers:show"
+        "command": "coverage-markers:toggle"
       }
     ]
   },
@@ -15,12 +15,8 @@
           "label": "Coverage Markers",
           "submenu": [
             {
-              "label": "Show Coverage",
-              "command": "coverage-markers:show"
-            },
-            {
-              "label": "Hide Coverage",
-              "command": "coverage-markers:hide"
+              "label": "Toggle Coverage",
+              "command": "coverage-markers:toggle"
             }
           ]
         }
