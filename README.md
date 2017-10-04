@@ -20,7 +20,7 @@ Coverage Markers is Atom package which displays JavaScript code coverage in gutt
 
 This package monitors lcov file and reflects the coverage in the editor every time the file is changed. The green line covers the test, the red one does not cover the test.
 
-To display the coverage in the editor, use the application menu `Packages > Coverage Markers > Show Coverage`. Also, to hide the coverage in the editor, use the application menu `Packages > Coverage Markers > Hide Coverage`
+To display the coverage in the editor, use the application menu `Packages > Coverage Markers > Toggle Coverage`.
 
 ## Todo
 * Switch coverage display style with line number highlight and line highlight
