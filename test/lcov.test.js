@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import { TextEditor } from 'atom';
 import * as Lcov from '../lib/lcov';
 
-const { getFileList, readLcovFile, getLcovPath, parseLcovInfo, addMarkers, removeMarkers, renderCoverage } = Lcov;
+const { getFileList, readLcovFile, findLcovFilePath, parseLcovInfo, addMarkers, deleteMarkers, renderMarkers } = Lcov;
 
 /* global atom, describe, it, beforeEach, afterEach, before, after, assert */
 
@@ -27,7 +27,7 @@ describe('Lcov', function () {
     });
   });
 
-  describe.skip('getLcovPath', function () {
+  describe.skip('findLcovFilePath', function () {
     let getFileListStub;
 
     const dummyValidFileList = [
@@ -64,7 +64,7 @@ describe('Lcov', function () {
         return Promise.resolve(Array.prototype.concat.apply([], dummyValidFileList));
       });
 
-      return assert.eventually.equal(getLcovPath(), '/coverage-report/coverage/lcov.info');
+      return assert.eventually.equal(findLcovFilePath(), '/coverage-report/coverage/lcov.info');
     });
 
     it('Throw error, when the lcov file is not found', function () {
@@ -73,7 +73,7 @@ describe('Lcov', function () {
         return Promise.resolve(Array.prototype.concat.apply([], dummyInvalidFileList));
       });
 
-      return assert.isRejected(getLcovPath(), 'Lcov path could not be found.');
+      return assert.isRejected(findLcovFilePath(), 'Lcov path could not be found.');
     });
   });
 
@@ -151,7 +151,7 @@ describe('Lcov', function () {
     });
   });
 
-  describe('removeMarkers', function () {
+  describe('deleteMarkers', function () {
     let editor;
 
     before(function () {
@@ -168,13 +168,13 @@ describe('Lcov', function () {
     });
 
     it('Delete all markers associated with the editor', function () {
-      removeMarkers(editor);
+      deleteMarkers(editor);
       const markers = editor.getMarkers();
       assert.equal(markers.length, 0);
     });
   });
 
-  describe('renderCoverage', function () {
+  describe('renderMarkers', function () {
     let editor;
     let lcovInfo;
 
@@ -196,7 +196,7 @@ describe('Lcov', function () {
     });
 
     it('Markers can be displayed to the editor', function () {
-      renderCoverage(editor, lcovInfo);
+      renderMarkers(editor, lcovInfo);
       const markers = editor.getMarkers();
       assert.isAbove(markers.length, 0);
     });
