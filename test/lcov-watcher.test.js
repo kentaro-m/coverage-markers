@@ -4,20 +4,20 @@ import path from 'path';
 
 /* global describe, it, beforeEach, assert */
 
-describe('LcovWatcher', function () {
+describe('LcovWatcher', () => {
   let editor;
 
-  beforeEach(function () {
+  beforeEach(() => {
     editor = new TextEditor();
   });
 
-  it('Create LcovWatcher instance', function () {
+  it('Create LcovWatcher instance', () => {
     const lcovPath = path.resolve(__dirname, 'fixture/dummy_lcov.info');
     const lcovWatcher = new LcovWatcher(editor, lcovPath);
     assert.instanceOf(lcovWatcher, LcovWatcher);
   });
 
-  it('Watch the Lcov file', function () {
+  it('Watch the Lcov file', () => {
     const lcovPath = path.resolve(__dirname, 'fixture/dummy_lcov.info');
     const lcovWatcher = new LcovWatcher(editor, lcovPath);
     lcovWatcher.watch();
@@ -25,7 +25,7 @@ describe('LcovWatcher', function () {
     lcovWatcher.unwatch();
   });
 
-  it('Unwatch the Lcov file', function () {
+  it('Unwatch the Lcov file', () => {
     const lcovPath = path.resolve(__dirname, 'fixture/dummy_lcov.info');
     const lcovWatcher = new LcovWatcher(editor, lcovPath);
     lcovWatcher.watch();
