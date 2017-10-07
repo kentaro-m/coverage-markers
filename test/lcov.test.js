@@ -5,74 +5,48 @@ import sinon from 'sinon';
 import { TextEditor } from 'atom';
 import * as Lcov from '../lib/lcov';
 
-const { getFileList, readLcovFile, findLcovFilePath, parseLcovFile, addMarkers, deleteMarkers, renderMarkers } = Lcov;
+const {
+  readLcovFile,
+  findLcovFilePath,
+  parseLcovFile,
+  addMarkers,
+  deleteMarkers,
+  renderMarkers
+} = Lcov;
+const glob = require('glob');
 
-/* global atom, describe, it, beforeEach, afterEach, before, after, assert */
+/* global describe, it, beforeEach, afterEach, before, after, assert */
 
 describe('Lcov', () => {
-  describe('getFileList', () => {
-    beforeEach(() => {
-      atom.project.addPath(path.resolve(__dirname, '../'));
-    });
-
-    it('Get project file list, when file list can be created', () => {
-      const paths = atom.project.getPaths();
-
-      return assert.eventually.isArray(getFileList(paths[0]));
-    });
-
-    it('Throw error, when file list can not be created', () => {
-      return assert.isRejected(getFileList('hoge'), 'Failed to create file list.');
-    });
-  });
-
-  describe.skip('findLcovFilePath', () => {
-    let getFileListStub;
+  describe('findLcovFilePath', () => {
+    let globStub;
 
     const dummyValidFileList = [
-      '/coverage-report/README.md',
-      '/coverage-report/coverage/lcov.info',
-      '/coverage-report/lib/coverage-markers.js',
-      '/coverage-report/lib/coverage.js',
-      '/coverage-report/lib/lcov-watcher.js',
-      '/coverage-report/lib/lcov.js',
-      '/coverage-report/lib/marker.js',
-    ];
-
-    const dummyInvalidFileList = [
-      '/coverage-report/README.md',
-      '/coverage-report/lib/coverage-markers.js',
-      '/coverage-report/lib/coverage.js',
-      '/coverage-report/lib/lcov-watcher.js',
-      '/coverage-report/lib/lcov.js',
-      '/coverage-report/lib/marker.js',
+      '/test-project/app/coverage/lcov.info',
     ];
 
     beforeEach(() => {
-      atom.project.addPath(path.resolve(__dirname, '../'));
-      getFileListStub = sinon.stub(Lcov, 'getFileList');
+      globStub = sinon.stub(glob, 'globAsync');
     });
 
     afterEach(() => {
-      getFileListStub.restore();
+      globStub.restore();
     });
 
     it('Get the lcov path, when the lcov file is found', () => {
-      // NOTE: Can not create a stub for getFileList
-      getFileListStub.onFirstCall().callsFake(() => {
-        return Promise.resolve(Array.prototype.concat.apply([], dummyValidFileList));
+      globStub.callsFake(() => {
+        return Promise.resolve(dummyValidFileList);
       });
 
-      return assert.eventually.equal(findLcovFilePath(), '/coverage-report/coverage/lcov.info');
+      return assert.eventually.equal(findLcovFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
     });
 
     it('Throw error, when the lcov file is not found', () => {
-      // NOTE: Can not create a stub for getFileList
-      getFileListStub.onFirstCall().callsFake(() => {
-        return Promise.resolve(Array.prototype.concat.apply([], dummyInvalidFileList));
+      globStub.callsFake(() => {
+        return Promise.resolve([]);
       });
 
-      return assert.isRejected(findLcovFilePath(), 'Lcov path could not be found.');
+      return assert.isRejected(findLcovFilePath('/test-project'), 'Lcov path could not be found.');
     });
   });
 

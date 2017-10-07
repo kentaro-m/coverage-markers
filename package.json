@@ -39,7 +39,8 @@
     "babel-runtime": "^6.23.0",
     "bluebird": "^3.5.0",
     "chokidar": "^1.7.0",
-    "event-kit": "^2.3.0"
+    "event-kit": "^2.3.0",
+    "glob": "^7.1.2"
   },
   "devDependencies": {
     "atom-mocha-test-runner": "^1.0.1",
