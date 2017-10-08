@@ -5,96 +5,69 @@ import sinon from 'sinon';
 import { TextEditor } from 'atom';
 import * as Lcov from '../lib/lcov';
 
-const { getFileList, readLcovFile, getLcovPath, parseLcovInfo, addMarkers, removeMarkers, renderCoverage } = Lcov;
+const {
+  readLcovFile,
+  findLcovFilePath,
+  parseLcovFile,
+  addMarkers,
+  deleteMarkers,
+  renderMarkers
+} = Lcov;
+const glob = require('glob');
 
-/* global atom, describe, it, beforeEach, afterEach, before, after, assert */
+/* global describe, it, beforeEach, afterEach, before, after, assert */
 
-describe('Lcov', function () {
-
-  describe('getFileList', function () {
-    beforeEach(function () {
-      atom.project.addPath(path.resolve(__dirname, '../'));
-    });
-
-    it('Get project file list, when file list can be created', function () {
-      const paths = atom.project.getPaths();
-
-      return assert.eventually.isArray(getFileList(paths[0]));
-    });
-
-    it('Throw error, when file list can not be created', function () {
-      return assert.isRejected(getFileList('hoge'), 'Failed to create file list.');
-    });
-  });
-
-  describe.skip('getLcovPath', function () {
-    let getFileListStub;
+describe('Lcov', () => {
+  describe('findLcovFilePath', () => {
+    let globStub;
 
     const dummyValidFileList = [
-      '/coverage-report/README.md',
-      '/coverage-report/coverage/lcov.info',
-      '/coverage-report/lib/coverage-markers.js',
-      '/coverage-report/lib/coverage.js',
-      '/coverage-report/lib/lcov-watcher.js',
-      '/coverage-report/lib/lcov.js',
-      '/coverage-report/lib/marker.js',
+      '/test-project/app/coverage/lcov.info',
     ];
 
-    const dummyInvalidFileList = [
-      '/coverage-report/README.md',
-      '/coverage-report/lib/coverage-markers.js',
-      '/coverage-report/lib/coverage.js',
-      '/coverage-report/lib/lcov-watcher.js',
-      '/coverage-report/lib/lcov.js',
-      '/coverage-report/lib/marker.js',
-    ];
-
-    beforeEach(function () {
-      atom.project.addPath(path.resolve(__dirname, '../'));
-      getFileListStub = sinon.stub(Lcov, 'getFileList');
+    beforeEach(() => {
+      globStub = sinon.stub(glob, 'globAsync');
     });
 
-    afterEach(function () {
-      getFileListStub.restore();
+    afterEach(() => {
+      globStub.restore();
     });
 
-    it('Get the lcov path, when the lcov file is found', function () {
-      // NOTE: Can not create a stub for getFileList
-      getFileListStub.onFirstCall().callsFake(function () {
-        return Promise.resolve(Array.prototype.concat.apply([], dummyValidFileList));
+    it('Get the lcov path, when the lcov file is found', () => {
+      globStub.callsFake(() => {
+        return Promise.resolve(dummyValidFileList);
       });
 
-      return assert.eventually.equal(getLcovPath(), '/coverage-report/coverage/lcov.info');
+      return assert.eventually.equal(findLcovFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
     });
 
-    it('Throw error, when the lcov file is not found', function () {
-      // NOTE: Can not create a stub for getFileList
-      getFileListStub.onFirstCall().callsFake(function () {
-        return Promise.resolve(Array.prototype.concat.apply([], dummyInvalidFileList));
+    it('Throw error, when the lcov file is not found', () => {
+      globStub.callsFake(() => {
+        return Promise.resolve([]);
       });
 
-      return assert.isRejected(getLcovPath(), 'Lcov path could not be found.');
+      return assert.isRejected(findLcovFilePath('/test-project'), 'Lcov path could not be found.');
     });
   });
 
-  describe('readLcovFile', function () {
+  describe('readLcovFile', () => {
     let readdirAsyncStub;
 
-    before(function () {
+    before(() => {
       readdirAsyncStub = sinon.stub(fs, 'readdirAsync').returns(new Error('no such file or directory'));
     });
 
-    after(function () {
+    after(() => {
       readdirAsyncStub.restore();
     });
 
-    it('Throw error, when lcov file can not be read', function () {
+    it('Throw error, when lcov file can not be read', () => {
       return assert.isRejected(readLcovFile('hoge'), 'Lcov file could not be read.');
     });
   });
 
-  describe('parseLcovInfo', function () {
-    it('Lcov object returns, when the lcov info is valid', function () {
+  describe('parseLcovFile', () => {
+    it.skip('Lcov object returns, when the lcov info is valid', () => {
       const dummyLcovInfo = `
       DA:16,0
       DA:17,0
@@ -107,10 +80,10 @@ describe('Lcov', function () {
       BRH:0
       end_of_record`;
 
-      return assert.isArray(parseLcovInfo(dummyLcovInfo));
+      return assert.isArray(parseLcovFile(dummyLcovInfo));
     });
 
-    it('Throw error, when the lcov info is invalid', function () {
+    it('Throw error, when the lcov info is invalid', () => {
       const dummyLcovInfo = `
       DA:0
       DA:17,0
@@ -124,19 +97,19 @@ describe('Lcov', function () {
       end_of_record`;
 
       assert.throws(() => {
-        parseLcovInfo(dummyLcovInfo);
+        parseLcovFile(dummyLcovInfo);
       }, 'Does not conform to the expected format for a lcov info');
     });
   });
 
-  describe('addMarkers', function () {
+  describe('addMarkers', () => {
     let editor;
 
-    before(function () {
+    before(() => {
       editor = new TextEditor();
     });
 
-    it('Add markers based on lines statement', function () {
+    it('Add markers based on lines statement', () => {
       const linesData = [
         { checksum: '', executionCount: 0, lineNumber: 16 },
         { checksum: '', executionCount: 1, lineNumber: 17 },
@@ -151,10 +124,10 @@ describe('Lcov', function () {
     });
   });
 
-  describe('removeMarkers', function () {
+  describe('deleteMarkers', () => {
     let editor;
 
-    before(function () {
+    before(() => {
       editor = new TextEditor();
       const linesData = [
         { checksum: '', executionCount: 0, lineNumber: 16 },
@@ -167,18 +140,18 @@ describe('Lcov', function () {
       return addMarkers(editor, linesData);
     });
 
-    it('Delete all markers associated with the editor', function () {
-      removeMarkers(editor);
+    it('Delete all markers associated with the editor', () => {
+      deleteMarkers(editor);
       const markers = editor.getMarkers();
       assert.equal(markers.length, 0);
     });
   });
 
-  describe('renderCoverage', function () {
+  describe('renderMarkers', () => {
     let editor;
     let lcovInfo;
 
-    before(function () {
+    before(() => {
       editor = new TextEditor();
       lcovInfo = [
         {
@@ -195,8 +168,8 @@ describe('Lcov', function () {
       ];
     });
 
-    it('Markers can be displayed to the editor', function () {
-      renderCoverage(editor, lcovInfo);
+    it('Markers can be displayed to the editor', () => {
+      renderMarkers(editor, lcovInfo);
       const markers = editor.getMarkers();
       assert.isAbove(markers.length, 0);
     });
