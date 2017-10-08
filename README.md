@@ -5,23 +5,34 @@
 [![apm](https://img.shields.io/apm/dm/coverage-markers.svg)](https://atom.io/packages/coverage-markers)
 [![Join the chat at https://gitter.im/coverage-markers/Lobby](https://badges.gitter.im/coverage-markers/Lobby.svg)](https://gitter.im/coverage-markers/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.
+Coverage Markers is Atom package which displays JavaScript test coverage in gutter of editor.
 
 ## Features
-![](./screenshots/coverage_markers001.png)
+![](./images/demo.png)
 
-* Mark covered lines in green, uncovered lines in red.
+* Mark covered line numbers in green, uncovered line numbers in red
 * Search for lcov file on project directory
-* Monitor lcov file and reflect the latest coverage in the editor
-* Supports combination of Mocha and Istanbul
+* Monitor lcov file and reflect the latest test coverage in the editor
+* Support for test coverage measurement tool such as istanbul and nyc
+
+## Installation
+```
+$ apm install coverage-markers
+```
 
 ## Usage
-![](./screenshots/coverage_markers002.gif)
+![](./images/usage.gif)
 
-This package monitors lcov file and reflects the coverage in the editor every time the file is changed. The green line covers the test, the red one does not cover the test.
+This package monitors lcov file (`coverage/lcov.info`) and reflects the coverage in the editor every time the file is changed. The green marker covers the test, the red one does not cover the test.
 
-To display the coverage in the editor, use the application menu `Packages > Coverage Markers > Toggle Coverage`.
+You can select the `coverage-markers:toggle` command from the atom command palette and use it, or use the application menu `Packages > Coverage Markers > Toggle Coverage`.
 
-## Todo
-* Switch coverage display style with line number highlight and line highlight
-* Cache lcov file
+**Note: You need to rebuild the package before using it, since this package uses a native module.**
+
+```
+$ apm rebuild
+```
+or rebuild package from Incompatible Packages in the editor.
+
+## License
+MIT
