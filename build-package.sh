@@ -1,8 +1,8 @@
 #!/bin/sh
 
-echo "Downloading latest Atom release..."
 ATOM_CHANNEL="${ATOM_CHANNEL:=stable}"
 
+echo "Downloading latest Atom release on the ${ATOM_CHANNEL} channel..."
 if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
   curl -s -L "https://atom.io/download/mac?channel=${ATOM_CHANNEL}" \
     -H 'Accept: application/octet-stream' \
@@ -41,15 +41,52 @@ elif [ "${TRAVIS_OS_NAME}" = "linux" ]; then
   export APM_SCRIPT_PATH="${HOME}/atom/usr/bin/${APM_SCRIPT_NAME}"
   export NPM_SCRIPT_PATH="${HOME}/atom/usr/share/${ATOM_SCRIPT_NAME}/resources/app/apm/node_modules/.bin/npm"
 elif [ "${CIRCLECI}" = "true" ]; then
-  curl -s -L "https://atom.io/download/deb?channel=${ATOM_CHANNEL}" \
-    -H 'Accept: application/octet-stream' \
-    -o "atom-amd64.deb"
-  sudo dpkg --install atom-amd64.deb || true
-  sudo apt-get update
-  sudo apt-get --fix-broken --assume-yes --quiet install
-  export ATOM_SCRIPT_PATH="atom"
-  export APM_SCRIPT_PATH="apm"
-  export NPM_SCRIPT_PATH="/usr/share/atom/resources/app/apm/node_modules/.bin/npm"
+  case "${CIRCLE_BUILD_IMAGE}" in
+    ubuntu*)
+      curl -s -L "https://atom.io/download/deb?channel=${ATOM_CHANNEL}" \
+        -H 'Accept: application/octet-stream' \
+        -o "atom-amd64.deb"
+      sudo dpkg --install atom-amd64.deb || true
+      sudo apt-get update
+      sudo apt-get --fix-broken --assume-yes --quiet install
+      if [ "${ATOM_CHANNEL}" = "stable" ]; then
+        export ATOM_SCRIPT_PATH="atom"
+        export APM_SCRIPT_PATH="apm"
+      else
+        export ATOM_SCRIPT_PATH="atom-${ATOM_CHANNEL}"
+        export APM_SCRIPT_PATH="apm-${ATOM_CHANNEL}"
+      fi
+      export NPM_SCRIPT_PATH="/usr/share/atom/resources/app/apm/node_modules/.bin/npm"
+      ;;
+    osx)
+      curl -s -L "https://atom.io/download/mac?channel=${ATOM_CHANNEL}" \
+        -H 'Accept: application/octet-stream' \
+        -o "atom.zip"
+      mkdir -p /tmp/atom
+      unzip -q atom.zip -d /tmp/atom
+      if [ "${ATOM_CHANNEL}" = "stable" ]; then
+        export ATOM_APP_NAME="Atom.app"
+        export ATOM_SCRIPT_NAME="atom.sh"
+        export ATOM_SCRIPT_PATH="/tmp/atom/${ATOM_APP_NAME}/Contents/Resources/app/atom.sh"
+      else
+        export ATOM_APP_NAME="Atom ${ATOM_CHANNEL}.app"
+        export ATOM_SCRIPT_NAME="atom-${ATOM_CHANNEL}"
+        export ATOM_SCRIPT_PATH="/tmp/atom-${ATOM_CHANNEL}"
+        ln -s "/tmp/atom/${ATOM_APP_NAME}/Contents/Resources/app/atom.sh" "${ATOM_SCRIPT_PATH}"
+      fi
+      export ATOM_PATH="/tmp/atom"
+      export APM_SCRIPT_PATH="/tmp/atom/${ATOM_APP_NAME}/Contents/Resources/app/apm/node_modules/.bin/apm"
+      export NPM_SCRIPT_PATH="/tmp/atom/${ATOM_APP_NAME}/Contents/Resources/app/apm/node_modules/.bin/npm"
+      export PATH="${PATH}:${TRAVIS_BUILD_DIR}/atom/${ATOM_APP_NAME}/Contents/Resources/app/apm/node_modules/.bin"
+
+      # Clear screen saver
+      osascript -e 'tell application "System Events" to keystroke "x"'
+      ;;
+    *)
+      echo "Unsupported CircleCI OS: ${CIRCLE_BUILD_IMAGE}" >&2
+      exit 1
+      ;;
+    esac
 else
   echo "Unknown CI environment, exiting!"
   exit 1
@@ -60,8 +97,8 @@ echo "Using Atom version:"
 echo "Using APM version:"
 "${APM_SCRIPT_PATH}" -v
 
-# echo "Downloading package dependencies..."
-# "${APM_SCRIPT_PATH}" clean
+echo "Downloading package dependencies..."
+"${APM_SCRIPT_PATH}" clean
 
 if [ "${ATOM_LINT_WITH_BUNDLED_NODE:=true}" = "true" ]; then
   "${APM_SCRIPT_PATH}" install
@@ -69,8 +106,10 @@ if [ "${ATOM_LINT_WITH_BUNDLED_NODE:=true}" = "true" ]; then
   # Override the PATH to put the Node bundled with APM first
   if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     export PATH="./atom/${ATOM_APP_NAME}/Contents/Resources/app/apm/bin:${PATH}"
+  elif [ "${CIRCLECI}" = "true" ] && [ "${CIRCLE_BUILD_IMAGE}" = "osx" ]; then
+    export PATH="/tmp/atom/${ATOM_APP_NAME}/Contents/Resources/app/apm/bin:${PATH}"
   elif [ "${CIRCLECI}" = "true" ]; then
-    # Since CircleCI is a fully installed environment, we use the system path to apm
+    # Since CircleCI/Linux is a fully installed environment, we use the system path to apm
     export PATH="/usr/share/atom/resources/app/apm/bin:${PATH}"
   else
     export PATH="${HOME}/atom/usr/share/${ATOM_SCRIPT_NAME}/resources/app/apm/bin:${PATH}"
@@ -95,50 +134,6 @@ if [ -n "${APM_TEST_PACKAGES}" ]; then
   done
 fi
 
-has_linter() {
-  linter_module_path="$( ${NPM_SCRIPT_PATH} ls --parseable --dev --depth=0 "$1" 2> /dev/null )"
-  [ -n "${linter_module_path}" ]
-}
-
-if has_linter "coffeelint"; then
-  if [ -d ./lib ]; then
-    echo "Linting package using coffeelint..."
-    ./node_modules/.bin/coffeelint lib
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-  if [ -d ./spec ]; then
-    echo "Linting package specs using coffeelint..."
-    ./node_modules/.bin/coffeelint spec
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-fi
-
-if has_linter "eslint"; then
-  if [ -d ./lib ]; then
-    echo "Linting package using eslint..."
-    ./node_modules/.bin/eslint lib
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-  if [ -d ./spec ]; then
-    echo "Linting package specs using eslint..."
-    ./node_modules/.bin/eslint spec
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-fi
-
-if has_linter "standard"; then
-  if [ -d ./lib ]; then
-    echo "Linting package using standard..."
-    ./node_modules/.bin/standard "lib/**/*.js"
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-  if [ -d ./spec ]; then
-    echo "Linting package specs using standard..."
-    ./node_modules/.bin/standard "spec/**/*.js"
-    rc=$?; if [ $rc -ne 0 ]; then exit $rc; fi
-  fi
-fi
-
 if [ -d ./spec ]; then
   echo "Running specs..."
   "${ATOM_SCRIPT_PATH}" --test spec
@@ -147,6 +142,6 @@ elif [ -d ./test ]; then
   "${ATOM_SCRIPT_PATH}" --test test
 else
   echo "Missing spec folder! Please consider adding a test suite in './spec' or in './test'"
-  exit 1
+  exit 0
 fi
 exit
