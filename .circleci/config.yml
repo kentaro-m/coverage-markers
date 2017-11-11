@@ -1,0 +1,102 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/workspace
+  docker:
+   - image: circleci/node:6.12.0
+     environment:
+       CIRCLE_BUILD_IMAGE: ubuntu
+       ATOM_CHANNEL: stable
+       DISPLAY: :99
+
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Make Atom script executable
+          command: chmod u+x build-package.sh
+      # Restore node_modules from the last build
+      - restore_cache:
+          keys:
+          # Get latest cache for this package.json
+          - dependency-cache-{{ checksum "package.json" }}
+          # Fallback to the last available cache
+          - dependency-cache
+      # Save project state for next steps
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workspace
+
+  stable:
+    <<: *defaults
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Update APT
+          command: |
+            sudo apt-get autoremove
+            sudo apt-get clean
+            sudo apt-get autoclean
+            sudo apt-get update
+      # Install some pre-requisite packages and missing dependencies from the atom package
+      - run:
+          name: Atom Prerequisites
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+      # Fire up a VFB to run Atom in
+      - run:
+          name: Create VFB for Atom to run in
+          command: /usr/bin/Xvfb $DISPLAY -ac -screen 0 1280x1024x16
+          background: true
+      - run:
+          name: Atom test
+          command: ./build-package.sh
+      # Cache node_modules
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependency-cache-{{ checksum "package.json" }}
+
+  beta:
+    <<: *defaults
+    environment:
+      ATOM_CHANNEL: beta
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Update APT
+          command: |
+            sudo apt-get autoremove
+            sudo apt-get clean
+            sudo apt-get autoclean
+            sudo apt-get update
+      # Install some pre-requisite packages and missing dependencies from the atom package
+      - run:
+          name: Atom Prerequisites
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+      # Fire up a VFB to run Atom in
+      - run:
+          name: Create VFB for Atom to run in
+          command: /usr/bin/Xvfb $DISPLAY -ac -screen 0 1280x1024x16
+          background: true
+      - run:
+          name: Atom test
+          command: ./build-package.sh
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - checkout_code
+      - stable:
+          requires:
+            - checkout_code
+      - beta:
+          requires:
+            - checkout_code
