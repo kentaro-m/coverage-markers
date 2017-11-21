@@ -1,5 +1,4 @@
 import Promise from 'bluebird';
-import path from 'path';
 import fs from 'fs';
 import sinon from 'sinon';
 import { TextEditor } from 'atom';
@@ -11,7 +10,7 @@ const {
   parseLcovFile,
   addMarkers,
   deleteMarkers,
-  renderMarkers
+  renderMarkers,
 } = Lcov;
 const glob = require('glob');
 

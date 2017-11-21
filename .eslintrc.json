@@ -5,6 +5,12 @@
     ],
     "rules": {
       "arrow-body-style": 0,
-      "indent": 0
+      "indent": 0,
+      "no-console": 0,
+      "global-require": 0,
+      "import/first": 0,
+      "import/no-extraneous-dependencies": 0,
+      "import/no-unresolved": 0,
+      "import/extensions": 0
     }
 }
