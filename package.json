@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "atom-mocha-test-runner": "^1.0.1",
+    "babel-plugin-rewire": "^1.1.0",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "co-mocha": "^1.2.0",
