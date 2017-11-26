@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import sinon from 'sinon';
 import { TextEditor } from 'atom';
 import Marker from '../lib/marker';
-import * as CoverageReport from '../lib/coverage-report';
+import * as CoverageReport from '../lib/coverage-file';
 
 const {
   findCoverageFilePath,
