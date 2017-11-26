@@ -5,11 +5,11 @@ import Marker from '../lib/marker';
 import * as CoverageReport from '../lib/coverage-report';
 
 const {
-  findCoverageReportFilePath,
-  removeCoverage,
-  findCoverageReportForActiveEditor,
-  readCoverageReportFile,
-  convertCoverageReportForVisibleEditors,
+  findCoverageFilePath,
+  removeMarkers,
+  findCoverageDataForActiveEditor,
+  readCoverageFile,
+  parseCoverageFile,
 } = CoverageReport;
 
 const glob = require('glob');
@@ -17,7 +17,7 @@ const glob = require('glob');
 /* global describe, it, beforeEach, afterEach, assert */
 
 describe('CoverageReport', () => {
-  describe('findCoverageReportFilePath', () => {
+  describe('findCoverageFilePath', () => {
     let globStub;
 
     const dummyValidFileList = [
@@ -37,7 +37,7 @@ describe('CoverageReport', () => {
         return Promise.resolve(dummyValidFileList);
       });
 
-      return assert.eventually.equal(findCoverageReportFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
+      return assert.eventually.equal(findCoverageFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
     });
 
     it('Throw the error, when the coverage report is not found', () => {
@@ -45,17 +45,17 @@ describe('CoverageReport', () => {
         return Promise.resolve([]);
       });
 
-      return assert.isRejected(findCoverageReportFilePath('/test-project'), 'coverage report file path could not be found.');
+      return assert.isRejected(findCoverageFilePath('/test-project'), 'coverage file path could not be found.');
     });
   });
 
-  describe('readCoverageReportFile', () => {
+  describe('readCoverageFile', () => {
     it('Throw the error, when the coverage file path is invalid', () => {
-      assert.isRejected(readCoverageReportFile('/test-project/lcov.info', 'coverage report file could not be read.'));
+      assert.isRejected(readCoverageFile('/test-project/lcov.info', 'coverage file could not be read.'));
     });
   });
 
-  describe('convertCoverageReportForVisibleEditors', () => {
+  describe('parseCoverageFile', () => {
     it('Get the coverage report, when the coverage file is valid', async () => {
       const coverageFile = `
         TN:
@@ -71,7 +71,7 @@ describe('CoverageReport', () => {
         BRH:0
         end_of_record`;
 
-        const coverageReport = convertCoverageReportForVisibleEditors(coverageFile);
+        const coverageReport = parseCoverageFile(coverageFile);
         assert.equal(coverageReport[0].sourceFile, '/test-project/index.js');
     });
 
@@ -90,12 +90,12 @@ describe('CoverageReport', () => {
         end_of_record`;
 
         assert.throws(() => {
-          convertCoverageReportForVisibleEditors(coverageFile);
-        }, 'coverage report could not be converted.');
+          parseCoverageFile(coverageFile);
+        }, 'coverage file could not be parsed.');
     });
   });
 
-  describe('findCoverageReportForActiveEditor', () => {
+  describe('findCoverageDataForActiveEditor', () => {
     it('Get the coverage report for active editor, when the coverage report is valid', () => {
       const coverageRecords = [
         {
@@ -124,12 +124,12 @@ describe('CoverageReport', () => {
         },
       ];
 
-      const result = findCoverageReportForActiveEditor('/test-project/bar.js', coverageRecords);
+      const result = findCoverageDataForActiveEditor('/test-project/bar.js', coverageRecords);
       assert.equal(result[0].sourceFile, '/test-project/bar.js');
     });
   });
 
-  describe('removeCoverage', () => {
+  describe('removeMarkers', () => {
     let editor;
 
     beforeEach(async () => {
@@ -140,7 +140,7 @@ describe('CoverageReport', () => {
     });
 
     it('Remove all markers from visible editors.', () => {
-      removeCoverage(editor);
+      removeMarkers(editor);
       const markers = editor.getMarkers();
       assert.equal(markers.length, 0);
     });
