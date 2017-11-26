@@ -32,7 +32,7 @@ describe('CoverageReport', () => {
       globStub.restore();
     });
 
-    it('Get the coverage report path, when the coverage report is found', () => {
+    it('Get the coverage path, when the coverage file is found', () => {
       globStub.callsFake(() => {
         return Promise.resolve(dummyValidFileList);
       });
@@ -40,7 +40,7 @@ describe('CoverageReport', () => {
       return assert.eventually.equal(findCoverageFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
     });
 
-    it('Throw the error, when the coverage report is not found', () => {
+    it('Throw the error, when the coverage file is not found', () => {
       globStub.callsFake(() => {
         return Promise.resolve([]);
       });
@@ -56,7 +56,7 @@ describe('CoverageReport', () => {
   });
 
   describe('parseCoverageFile', () => {
-    it('Get the coverage report, when the coverage file is valid', async () => {
+    it('Get the coverage data, when the coverage file is valid', async () => {
       const coverageFile = `
         TN:
         SF:/test-project/index.js
@@ -96,7 +96,7 @@ describe('CoverageReport', () => {
   });
 
   describe('findCoverageDataForActiveEditor', () => {
-    it('Get the coverage report for active editor, when the coverage report is valid', () => {
+    it('Get the coverage data for active editor, when the coverage file is valid', () => {
       const coverageRecords = [
         {
           sourceFile: '/test-project/foo.js',
