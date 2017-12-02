@@ -12,7 +12,7 @@ atom-text-editor {
     padding-left: 0.8em;
   }
   .gutter .line-number {
-    &:before {
+    &.line-number-green:before {
       content: '';
       display: inline-block;
       width: 10px;
@@ -23,13 +23,20 @@ atom-text-editor {
       position: absolute;
       top: 5px;
       left: 0px;
-    }
-
-    &.line-number-green:before {
       background: #8BC34A;
     }
 
     &.line-number-red:before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      position: absolute;
+      top: 5px;
+      left: 0px;
       background: #F44336;
     }
   }
