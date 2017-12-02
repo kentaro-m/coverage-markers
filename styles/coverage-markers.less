@@ -8,9 +8,10 @@
 }
 
 atom-text-editor {
+  .gutter.line-numbers.coverage-markers-gutter {
+    padding-left: 0.8em;
+  }
   .gutter .line-number {
-    padding-left: 1.8em;
-
     &:before {
       content: '';
       display: inline-block;
@@ -21,7 +22,7 @@ atom-text-editor {
       border-radius: 5px;
       position: absolute;
       top: 5px;
-      left: 7px;
+      left: 0px;
     }
 
     &.line-number-green:before {
