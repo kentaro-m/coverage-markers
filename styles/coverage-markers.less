@@ -8,10 +8,11 @@
 }
 
 atom-text-editor {
+  .gutter.line-numbers.coverage-markers-gutter {
+    padding-left: 0.8em;
+  }
   .gutter .line-number {
-    padding-left: 1.8em;
-
-    &:before {
+    &.line-number-green:before {
       content: '';
       display: inline-block;
       width: 10px;
@@ -21,14 +22,21 @@ atom-text-editor {
       border-radius: 5px;
       position: absolute;
       top: 5px;
-      left: 7px;
-    }
-
-    &.line-number-green:before {
+      left: 0px;
       background: #8BC34A;
     }
 
     &.line-number-red:before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      position: absolute;
+      top: 5px;
+      left: 0px;
       background: #F44336;
     }
   }
