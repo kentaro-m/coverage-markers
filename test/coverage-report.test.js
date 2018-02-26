@@ -20,9 +20,7 @@ describe('CoverageReport', () => {
   describe('findCoverageFilePath', () => {
     let globStub;
 
-    const dummyValidFileList = [
-      '/test-project/app/coverage/lcov.info',
-    ];
+    const dummyValidFileList = ['/test-project/app/coverage/lcov.info'];
 
     beforeEach(() => {
       globStub = sinon.stub(glob, 'globAsync');
@@ -37,7 +35,10 @@ describe('CoverageReport', () => {
         return Promise.resolve(dummyValidFileList);
       });
 
-      return assert.eventually.equal(findCoverageFilePath('/test-project'), '/test-project/app/coverage/lcov.info');
+      return assert.eventually.equal(
+        findCoverageFilePath('/test-project'),
+        '/test-project/app/coverage/lcov.info'
+      );
     });
 
     it('Throw the error, when the coverage file is not found', () => {
@@ -45,13 +46,21 @@ describe('CoverageReport', () => {
         return Promise.resolve([]);
       });
 
-      return assert.isRejected(findCoverageFilePath('/test-project'), 'coverage file path could not be found.');
+      return assert.isRejected(
+        findCoverageFilePath('/test-project'),
+        'coverage file path could not be found.'
+      );
     });
   });
 
   describe('readCoverageFile', () => {
     it('Throw the error, when the coverage file path is invalid', () => {
-      assert.isRejected(readCoverageFile('/test-project/lcov.info', 'coverage file could not be read.'));
+      assert.isRejected(
+        readCoverageFile(
+          '/test-project/lcov.info',
+          'coverage file could not be read.'
+        )
+      );
     });
   });
 
@@ -71,8 +80,8 @@ describe('CoverageReport', () => {
         BRH:0
         end_of_record`;
 
-        const coverageReport = parseCoverageFile(coverageFile);
-        assert.equal(coverageReport[0].sourceFile, '/test-project/index.js');
+      const coverageReport = parseCoverageFile(coverageFile);
+      assert.equal(coverageReport[0].sourceFile, '/test-project/index.js');
     });
 
     it('Throw the error, when the coverage file is invalid', () => {
@@ -89,9 +98,9 @@ describe('CoverageReport', () => {
         BRH:0
         end_of_record`;
 
-        assert.throws(() => {
-          parseCoverageFile(coverageFile);
-        }, 'coverage file could not be parsed.');
+      assert.throws(() => {
+        parseCoverageFile(coverageFile);
+      }, 'coverage file could not be parsed.');
     });
   });
 
@@ -124,7 +133,10 @@ describe('CoverageReport', () => {
         },
       ];
 
-      const result = findCoverageDataForActiveEditor('/test-project/bar.js', coverageRecords);
+      const result = findCoverageDataForActiveEditor(
+        '/test-project/bar.js',
+        coverageRecords
+      );
       assert.equal(result[0].sourceFile, '/test-project/bar.js');
     });
   });
