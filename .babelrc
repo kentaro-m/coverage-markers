@@ -1,13 +1,14 @@
 {
-  "sourceMaps": "inline",
+  "sourceMap": "inline",
   "presets": [
-    "es2015"
-  ],
-  "plugins": [
-    "transform-runtime",
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "babel-plugin-transform-async-to-generator"
-  ],
-  "babelrc": false
+    [
+      "env",
+      {
+        "targets": {
+          "node": "7.4",
+          "browsers": "chrome 56"
+        }
+      }
+    ]
+  ]
 }
