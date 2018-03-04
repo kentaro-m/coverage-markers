@@ -1,6 +1,13 @@
 import Promise from 'bluebird';
 import sinon from 'sinon';
 import { TextEditor } from 'atom';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import glob from 'glob';
+
+chai.use(chaiAsPromised);
+
+const { assert } = chai;
 import Marker from '../lib/marker';
 import * as CoverageReport from '../lib/coverage-file';
 
@@ -12,9 +19,7 @@ const {
   parseCoverageFile,
 } = CoverageReport;
 
-const glob = require('glob');
-
-/* global describe, it, beforeEach, afterEach, assert */
+/* global describe, it, beforeEach, afterEach */
 
 describe('CoverageReport', () => {
   describe('findCoverageFilePath', () => {

@@ -1,7 +1,13 @@
 import { TextEditor } from 'atom';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+chai.use(chaiAsPromised);
+
+const { assert } = chai;
 import Marker from '../lib/marker';
 
-/* global describe, it, beforeEach, assert */
+/* global describe, it, beforeEach */
 
 describe('Markers', () => {
   let editor;
