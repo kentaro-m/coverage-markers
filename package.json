@@ -2,13 +2,9 @@
   "name": "coverage-markers",
   "main": "index.js",
   "version": "0.4.1",
-  "description": "Coverage Markers is Atom package which displays JavaScript code coverage in gutter of editor.",
-  "keywords": [
-    "atom",
-    "javascript",
-    "coverage",
-    "lcov"
-  ],
+  "description":
+    "Atom package to display JavaScript test coverage on gutter of editor.",
+  "keywords": ["atom", "javascript", "coverage", "lcov"],
   "activationCommands": {
     "atom-workspace": "coverage-markers:toggle"
   },
@@ -30,10 +26,7 @@
       "glob": "{lib,test}/**/*.js",
       "transpiler": "atom-babel6-transpiler",
       "options": {
-        "cacheKeyFiles": [
-          "package.json",
-          ".babelrc"
-        ]
+        "cacheKeyFiles": ["package.json", ".babelrc"]
       }
     }
   ],
@@ -57,7 +50,6 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.6.1",
     "eslint-plugin-prettier": "^2.6.0",
-    "loophole": "^1.1.0",
     "mocha": "^3.4.2",
     "prettier": "^1.10.2",
     "sinon": "^2.3.6"
