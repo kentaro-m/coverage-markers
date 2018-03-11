@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { TextEditor } from 'atom';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import glob from 'glob';
+import fg from 'fast-glob';
 
 chai.use(chaiAsPromised);
 
@@ -23,20 +23,20 @@ const {
 
 describe('CoverageReport', () => {
   describe('findCoverageFilePath', () => {
-    let globStub;
+    let fgStub;
 
     const dummyValidFileList = ['/test-project/app/coverage/lcov.info'];
 
     beforeEach(() => {
-      globStub = sinon.stub(glob, 'globAsync');
+      fgStub = sinon.stub(fg, 'async');
     });
 
     afterEach(() => {
-      globStub.restore();
+      fgStub.restore();
     });
 
     it('Get the coverage path, when the coverage file is found', () => {
-      globStub.callsFake(() => {
+      fgStub.callsFake(() => {
         return Promise.resolve(dummyValidFileList);
       });
 
@@ -47,7 +47,7 @@ describe('CoverageReport', () => {
     });
 
     it('Throw the error, when the coverage file is not found', () => {
-      globStub.callsFake(() => {
+      fgStub.callsFake(() => {
         return Promise.resolve([]);
       });
 
