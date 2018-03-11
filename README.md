@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b91f307a30704e24f143/maintainability)](https://codeclimate.com/github/kentaro-m/coverage-markers/maintainability)
 [![license](https://img.shields.io/github/license/kentaro-m/coverage-markers.svg?style=flat-square)](https://github.com/kentaro-m/coverage-markers/blob/master/LICENSE.md)
 
-:atom: Atom package to display JavaScript test coverage on gutter of editor.
+Atom package to display JavaScript test coverage on gutter of editor.
 
 ## Features
 
