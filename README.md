@@ -54,12 +54,12 @@ Please use the [GitHub Issue](https://github.com/kentaro-m/coverage-markers/issu
 
 ### Pull Request
 
-1.  Fork it (<https://github.com/kentaro-m/coverage-markers/fork>)
-2.  Create your feature branch
-3.  Run the test (`$ npm test`) and make sure it passed :white_check_mark:
-4.  Commit your changes :pencil:
-5.  Push to the branch
-6.  Create a new Pull Request :heart:
+1. Fork it (<https://github.com/kentaro-m/coverage-markers/fork>)
+2. Create your feature branch
+3. Run the test (`$ npm test`) and make sure it passed :white_check_mark:
+4. Commit your changes :pencil:
+5. Push to the branch
+6. Create a new Pull Request :heart:
 
 ## License
 
