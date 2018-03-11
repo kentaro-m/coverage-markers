@@ -42,13 +42,13 @@
     "bluebird": "^3.5.0",
     "chokidar": "^1.7.0",
     "event-kit": "^2.3.0",
-    "fast-glob": "^2.1.0"
+    "fast-glob": "^2.1.0",
+    "atom-babel6-transpiler": "^1.1.1",
+    "babel-preset-env": "^1.6.1",
+    "ajv": "^6.2.0"
   },
   "devDependencies": {
-    "ajv": "^6.2.0",
-    "atom-babel6-transpiler": "^1.1.1",
     "atom-mocha-test-runner": "^1.0.1",
-    "babel-preset-env": "^1.6.1",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "co-mocha": "^1.2.0",
