@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b91f307a30704e24f143/maintainability)](https://codeclimate.com/github/kentaro-m/coverage-markers/maintainability)
 [![license](https://img.shields.io/github/license/kentaro-m/coverage-markers.svg?style=flat-square)](https://github.com/kentaro-m/coverage-markers/blob/master/LICENSE.md)
 
-:atom: Atom package to display JavaScript test coverage on gutter of editor.
+Atom package to display JavaScript test coverage on gutter of editor.
 
 ## Features
 
@@ -54,12 +54,12 @@ Please use the [GitHub Issue](https://github.com/kentaro-m/coverage-markers/issu
 
 ### Pull Request
 
-1. Fork it (<https://github.com/kentaro-m/coverage-markers/fork>)
-2. Create your feature branch
-3. Run the test (`$ npm test`) and make sure it passed :white_check_mark:
-4. Commit your changes :pencil:
-5. Push to the branch
-6. Create a new Pull Request :heart:
+1.  Fork it (<https://github.com/kentaro-m/coverage-markers/fork>)
+2.  Create your feature branch
+3.  Run the test (`$ npm test`) and make sure it passed :white_check_mark:
+4.  Commit your changes :pencil:
+5.  Push to the branch
+6.  Create a new Pull Request :heart:
 
 ## License
 
