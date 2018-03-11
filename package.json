@@ -1,7 +1,7 @@
 {
   "name": "coverage-markers",
   "main": "index.js",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Atom package to display JavaScript test coverage on gutter of editor.",
   "keywords": [
     "atom",
