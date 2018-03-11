@@ -35,7 +35,7 @@
     "bluebird": "^3.5.0",
     "chokidar": "^1.7.0",
     "event-kit": "^2.3.0",
-    "glob": "^7.1.2"
+    "fast-glob": "^2.1.0"
   },
   "devDependencies": {
     "ajv": "^6.2.0",
